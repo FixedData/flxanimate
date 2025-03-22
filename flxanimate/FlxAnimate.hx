@@ -57,6 +57,27 @@ typedef Settings = {
 @:access(flixel.FlxCamera)
 class FlxAnimate extends FlxSprite
 {
+	public static function assetsGetBitmapData(id:String)
+	{
+		#if sys return BitmapData.fromFile(id); #end
+		return Assets.getBitmapData(id);
+	}
+
+	public static function assetsExists(asset:String,?type:openfl.utils.AssetType)
+	{
+		#if sys
+		if (sys.FileSystem.exists(asset)) return true;
+		#end
+		return Assets.exists(asset,type);
+	}
+
+
+	public static function assetsGetText(text:String)
+	{
+		#if sys if (sys.FileSystem.exists(text)) return sys.io.File.getContent(text); #end
+		return Assets.getText(text);
+	}
+
 	public var anim(default, null):FlxAnim;
 
 	// #if FLX_SOUND_SYSTEM
@@ -116,12 +137,12 @@ class FlxAnimate extends FlxSprite
 	public function loadAtlas(atlasDirectory:String)
 	{
 		var p = haxe.io.Path.removeTrailingSlashes(haxe.io.Path.normalize(atlasDirectory));
-		if (!Assets.exists('$atlasDirectory/Animation.json') && haxe.io.Path.extension(atlasDirectory) != "zip")
+		if (!assetsExists('$atlasDirectory/Animation.json') && haxe.io.Path.extension(atlasDirectory) != "zip")
 		{
 			FlxG.log.error('Animation file not found in specified path: "${atlasDirectory}", have you written the correct path?');
 			return;
 		}
-		if (!Assets.exists('$atlasDirectory/metadata.json'))
+		if (!assetsExists('$atlasDirectory/metadata.json'))
 			loadSeparateAtlas(atlasSetting(atlasDirectory), FlxAnimateFrames.fromTextureAtlas(atlasDirectory));
 		else
 		{
@@ -845,7 +866,7 @@ class FlxAnimate extends FlxSprite
 			FlxAnimateFrames.zip = thing;
 		}
 		else
-			jsontxt = openfl.Assets.getText('$directoryPath/Animation.json');
+			jsontxt = assetsGetText('$directoryPath/Animation.json');
 
 		return jsontxt;
 	}

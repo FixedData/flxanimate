@@ -205,9 +205,9 @@ class FlxAnim implements IFlxDestroyable
 		library._parent = this;
 		stageInstance = null;
 
-		var animationFile:AnimAtlas = haxe.Json.parse(Assets.getText(path + "/Animation.json"));
+		var animationFile:AnimAtlas = haxe.Json.parse(FlxAnimate.assetsGetText(path + "/Animation.json"));
 
-		var md:MetaData = haxe.Json.parse(Assets.getText(path + "/metadata.json"));
+		var md:MetaData = haxe.Json.parse(FlxAnimate.assetsGetText(path + "/metadata.json"));
 		
 
 		var colon = path.indexOf(":");
@@ -244,7 +244,7 @@ class FlxAnim implements IFlxDestroyable
 
 		for (symbol in symbols)
 		{
-			var json = haxe.Json.parse(Assets.getText(l + symbol));
+			var json = haxe.Json.parse(FlxAnimate.assetsGetText(l + symbol));
 			library.addSymbol(new FlxSymbol(haxe.io.Path.withoutExtension(symbol.substring(po.length + 9)), FlxTimeline.fromJSONEx(json)));
 		}
 		symbolDictionary = library.getList();
